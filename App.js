@@ -11,32 +11,17 @@ import {
 import {
   SafeAreaProvider,
   SafeAreaView as CSafeArea,
+  useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import * as NavigationBar from "expo-navigation-bar";
+import Child from "./Child";
 
 export default function App() {
   const [isOn, setIsOn] = useState(false);
-  const visibility = NavigationBar.useVisibility();
   useEffect(() => {
     NavigationBar.setBackgroundColorAsync("#ffffff00");
     NavigationBar.setPositionAsync("absolute");
   }, []);
-
-  const renderButton = () => {
-    return (
-      <View
-        style={{ backgroundColor: "orange", flex: 1, justifyContent: "center" }}
-      >
-        <TouchableOpacity
-          onPress={() => {
-            setIsOn(!isOn);
-          }}
-        >
-          <Text>Toggle</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
 
   const renderOn = () => {
     return (
@@ -44,7 +29,9 @@ export default function App() {
         <SafeAreaProvider style={{ flex: 1 }}>
           <StatusBar style="auto" />
           <View style={styles.container}>
-            <CSafeArea style={{ flex: 1 }}>{renderButton()}</CSafeArea>
+            <CSafeArea style={{ flex: 1 }}>
+              <Child {...{ isOn, setIsOn }} shouldKeepBottomArea />
+            </CSafeArea>
           </View>
         </SafeAreaProvider>
       </>
@@ -55,7 +42,13 @@ export default function App() {
       <>
         <SafeAreaProvider style={{ flex: 1 }}>
           <StatusBar style="auto" />
-          <View style={styles.container}>{renderButton()}</View>
+          <View style={styles.container}>
+            <Child
+              {...{ isOn, setIsOn }}
+              shouldKeepTopArea
+              shouldKeepBottomArea
+            />
+          </View>
         </SafeAreaProvider>
       </>
     );
